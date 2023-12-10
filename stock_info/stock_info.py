@@ -52,10 +52,12 @@ if btn:
         return df.to_csv().encode('utf-8')
 
     def df_excel(df):
-        df.to_excel('df.xlsx')
+        df.to_excel('df.xlsx', index=False)
+        st.success("Excel 파일 다운로드 성공")
 
     col1, col2 = st.columns([1, 1])
     col1.download_button("CSV 파일 다운로드", df_csv(df), 'df.csv')
-    col2.button("엑셀 파일 다운로드", on_click=df_excel(df))
+    if col2.button("엑셀 파일 다운로드"):
+        df_excel(df)
 
 
