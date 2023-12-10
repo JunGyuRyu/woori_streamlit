@@ -51,19 +51,16 @@ if btn:
     def df_csv(df):
         return df.to_csv().encode('utf-8')
 
-    def df_excel(df):
-        excel_buffer = BytesIO()
-        df.to_excel(excel_buffer, index=False)
-        excel_buffer.seek(0)
-        st.success("Excel 파일 다운로드")
-        st.download_button('Download Excel File',
+    col1, col2 = st.columns([1, 1])
+
+    # buffer setting
+    excel_buffer = BytesIO()
+    df.to_excel(excel_buffer, index=False)
+    excel_buffer.seek(0)
+    
+    col1.download_button("CSV 파일 다운로드", df_csv(df), 'df.csv')
+    col2.download_button('Excel 파일 다운로드',
                             data=excel_buffer.getvalue(),
                             file_name='df.xlsx',
-                            key='excel-download')
-
-    col1, col2 = st.columns([1, 1])
-    col1.download_button("CSV 파일 다운로드", df_csv(df), 'df.csv')
-    if col2.button("엑셀 파일 다운로드"):
-        df_excel(df)
-
+                            key='excel_download')
 
