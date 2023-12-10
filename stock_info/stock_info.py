@@ -3,6 +3,7 @@ import pandas as pd
 import FinanceDataReader as fdr
 import datetime
 import pandas as pd
+from io import BytesIO
 
 def get_stock_info():
     base_url =  "http://kind.krx.co.kr/corpgeneral/corpList.do"    
@@ -35,7 +36,6 @@ with st.sidebar:
 st.header("무슨 주식을 사야 부자가 되려나...")
 
 if btn:
-    # 코드 조각 추가
     try:
         ticker_symbol = get_ticker_symbol(stock_name)
     except:
@@ -52,8 +52,14 @@ if btn:
         return df.to_csv().encode('utf-8')
 
     def df_excel(df):
-        df.to_excel('df.xlsx', index=False)
-        st.success("Excel 파일 다운로드 성공")
+        excel_buffer = BytesIO()
+        df.to_excel(excel_buffer, index=False)
+        excel_buffer.seek(0)
+        st.success("Excel 파일 다운로드")
+        st.download_button('Download Excel File',
+                            data=excel_buffer,
+                            file_name='df.xlsx',
+                            key='excel-download')
 
     col1, col2 = st.columns([1, 1])
     col1.download_button("CSV 파일 다운로드", df_csv(df), 'df.csv')
