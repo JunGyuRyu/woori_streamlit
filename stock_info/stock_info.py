@@ -57,7 +57,7 @@ if btn:
         excel_buffer.seek(0)
         st.success("Excel 파일 다운로드")
         st.download_button('Download Excel File',
-                            data=excel_buffer,
+                            data=excel_buffer.getvalue(),
                             file_name='df.xlsx',
                             key='excel-download')
 
